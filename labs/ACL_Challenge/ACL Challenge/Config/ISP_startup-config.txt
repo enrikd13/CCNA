@@ -1,0 +1,47 @@
+!
+version 12.3
+no service password-encryption
+!
+hostname ISP
+!
+!
+!
+!
+interface FastEthernet0/0
+ description Link to Web Server
+ ip address 209.165.202.129 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ description Link to Customer
+ ip address 209.165.201.1 255.255.255.252
+ clock rate 64000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+ip route 10.0.0.0 255.0.0.0 Serial0/0/0 
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+end
+

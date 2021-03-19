@@ -1,0 +1,108 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname North
+!
+!
+!
+enable password cisco
+!
+!
+!
+!
+!
+!
+username cisco privilege 15 password 0 ssh
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name Cisco.com
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 192.168.90.1 255.255.255.0
+ ip access-group NorthB-Accounting out
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+ frame-relay lmi-type ansi
+!
+interface Serial0/0/0.106 point-to-point
+ ip address 200.10.60.2 255.255.255.0
+ frame-relay interface-dlci 106
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 100
+ network 192.168.90.0
+ network 200.10.60.0
+ no auto-summary
+!
+ip classless
+!
+!
+ip access-list extended AdminUser
+ permit tcp any host 192.168.1.2 eq 22
+ permit tcp any host 192.168.1.2 eq telnet
+ deny ip any any
+ip access-list extended NorthB-Accounting
+ deny ip host 192.168.80.3 192.168.90.0 0.0.0.255
+ deny ip host 192.168.80.4 192.168.90.0 0.0.0.255
+ deny ip host 192.168.80.5 192.168.90.0 0.0.0.255
+ deny ip 192.168.10.0 0.0.0.255 192.168.90.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 192.168.90.0 0.0.0.255
+ deny ip 192.168.40.0 0.0.0.255 192.168.90.0 0.0.0.255
+ deny ip 192.168.100.0 0.0.0.255 192.168.90.0 0.0.0.255
+ permit ip any any
+!
+no cdp run
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+line vty 0 4
+ access-class AdminUser in
+ password cisco
+ login
+ privilege level 15
+line vty 5 15
+ access-class AdminUser in
+ password cisco
+ login
+ privilege level 15
+!
+!
+!
+end
+

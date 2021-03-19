@@ -1,0 +1,80 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+!
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 192.168.20.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ ip address 10.1.1.2 255.255.255.252
+!
+interface Serial0/1/0
+ ip address 10.2.2.1 255.255.255.252
+ clock rate 64000
+!
+interface Serial0/2/0
+ ip address 200.200.200.1 255.255.255.224
+!
+interface Serial0/3/0
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.1.1.0 0.0.0.3 area 0
+ network 10.2.2.0 0.0.0.3 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 200.200.200.0 0.0.0.31 area 0
+!
+ip classless
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+

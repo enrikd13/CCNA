@@ -1,0 +1,170 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname ASW1
+!
+!
+!
+!
+!
+clock timezone UTC 0 0
+!
+ip routing
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+interface Port-channel 13
+ description L2 dot1Q Trunk to DSW1
+ switchport trunk allowed vlan 1,20,200
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel 23
+ description L2 dot1Q Trunk to DSW2
+ switchport trunk allowed vlan 1,20,200
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+ duplex full
+ speed 100
+!
+interface FastEthernet0/2
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+ duplex full
+ speed 100
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+ channel-group 13 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/20
+ channel-group 13 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/21
+ channel-group 23 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/22
+ channel-group 23 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan10
+ description Client VLAN on ASW1
+ no ip address
+!
+interface Vlan200
+ description Netw- Management VLAN
+ ip address 192.168.1.131 255.255.255.224
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.1.129 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp authentication-key 1 md5 TSHOOT
+ntp authenticate
+ntp trusted-key 1
+ntp server 209.65.200.241 key 1
+ntp update-calendar
+!
+end
+

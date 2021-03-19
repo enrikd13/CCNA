@@ -1,0 +1,125 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Data-Center
+!
+!
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+!
+!
+!
+aaa new-model
+!
+aaa authentication login default group tacacs+ none 
+aaa authentication login telnet_lines group tacacs+ 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 1
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ ip address 10.10.10.1 255.255.255.0
+ ip access-group BLK_FTP out
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+!
+interface Serial0/0/0.1 point-to-point
+ ip address 192.168.1.254 255.255.255.0
+ ip helper-address 192.168.40.200
+ frame-relay interface-dlci 102
+ ip nat inside
+ clock rate 2000000
+!
+interface Serial0/0/0.2 point-to-point
+ ip address 192.168.2.190 255.255.255.192
+ frame-relay interface-dlci 103
+ ip nat inside
+ clock rate 2000000
+!
+interface Serial0/0/1
+ ip address 198.0.18.9 255.255.255.252
+ ip access-group INTERNET in
+ ip nat outside
+ clock rate 64000
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 15
+ redistribute static 
+ network 192.168.0.0 0.0.255.255
+ network 10.10.10.0 0.0.0.255
+ no auto-summary
+!
+ip nat inside source list NAT interface Serial0/0/1 overload
+ip nat inside source static tcp 10.10.10.254 80 198.0.18.9 80 
+ip classless
+ip route 0.0.0.0 0.0.0.0 Serial0/0/1 
+!
+!
+ip access-list extended BLK_FTP
+ permit tcp 172.16.20.0 0.0.0.127 host 10.10.10.254 eq ftp
+ deny tcp any any eq ftp
+ permit ip any any
+access-list 10 remark RESTRICT VTY TO VLAN10 CISCO1
+access-list 10 permit 192.168.8.0 0.0.3.255
+ip access-list extended INTERNET
+ permit tcp any host 198.0.18.9 eq www
+ permit tcp any host 198.0.18.9 eq smtp
+ permit tcp any host 198.0.18.9 eq pop3
+ permit tcp any any established
+ip access-list standard NAT
+ deny 192.168.8.0 0.0.3.255
+ permit any
+!
+no cdp run
+!
+!
+tacacs-server host 192.168.40.200 key ciscosecret
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+line vty 0 4
+ access-class 10 in
+ exec-timeout 0 0
+ login authentication telnet_lines
+!
+!
+!
+end
+

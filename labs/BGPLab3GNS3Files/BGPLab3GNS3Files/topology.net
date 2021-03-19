@@ -1,0 +1,76 @@
+autostart = False
+version = 0.8.6
+[127.0.0.1:7200]
+    workingdir = C:\Users\Adeolu\Documents\GNS3
+    udp = 10001
+    [[3660]]
+        image = C:\Users\Adeolu\Documents\GNS3\IOS\Unpack\c3660-a3jk9s-mz.124-15.T14.bin.unpacked
+        idlepc = 0x60638730
+        sparsemem = True
+        ghostios = True
+        chassis = 3660
+    [[ROUTER R4]]
+        model = 3660
+        console = 2106
+        aux = 2504
+        f0/0 = R3 f0/0
+        f0/1 = R2 f0/1
+        slot1 = NM-1FE-TX
+        f1/0 = R5 f0/1
+        cnfg = configs\R4.cfg
+        x = -44.0
+        y = -165.0
+        z = 1.0
+    [[ROUTER R1]]
+        model = 3660
+        console = 2101
+        aux = 2501
+        f0/0 = R2 f0/0
+        f0/1 = R3 f0/1
+        cnfg = configs\R1.cfg
+        x = -254.0
+        y = -27.0
+        z = 1.0
+    [[ROUTER R2]]
+        model = 3660
+        console = 2102
+        aux = 2502
+        f0/0 = R1 f0/0
+        f0/1 = R4 f0/1
+        slot1 = NM-1FE-TX
+        f1/0 = R5 f0/0
+        cnfg = configs\R2.cfg
+        x = -44.0
+        y = -27.0
+        z = 1.0
+    [[ROUTER R3]]
+        model = 3660
+        console = 2104
+        aux = 2503
+        f0/0 = R4 f0/0
+        f0/1 = R1 f0/1
+        cnfg = configs\R3.cfg
+        x = -254.0
+        y = -165.0
+        z = 1.0
+[127.0.0.1:7201]
+    workingdir = C:\Users\Adeolu\Documents\GNS3
+    udp = 10101
+    [[3660]]
+        image = C:\Users\Adeolu\Documents\GNS3\IOS\Unpack\c3660-a3jk9s-mz.124-15.T14.bin.unpacked
+        idlepc = 0x60638730
+        sparsemem = True
+        ghostios = True
+        chassis = 3660
+    [[ROUTER R5]]
+        model = 3660
+        console = 2108
+        aux = 2505
+        f0/0 = R2 f1/0
+        f0/1 = R4 f1/0
+        cnfg = configs\R5.cfg
+        x = 137.0
+        y = -165.0
+        z = 1.0
+[GNS3-DATA]
+    configs = configs

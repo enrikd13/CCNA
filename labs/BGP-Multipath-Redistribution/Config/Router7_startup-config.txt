@@ -1,0 +1,76 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R7
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 192.168.7.1 255.255.255.0
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0
+ no ip address
+ shutdown
+!
+interface Serial0/1
+ no ip address
+ shutdown
+!
+interface Serial0/2
+ no ip address
+ shutdown
+!
+interface Serial0/3
+ ip address 10.3.7.7 255.255.255.0
+!
+router eigrp 100
+ network 10.3.7.0 0.0.0.255
+ network 192.168.7.0
+ auto-summary
+!
+ip classless
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+

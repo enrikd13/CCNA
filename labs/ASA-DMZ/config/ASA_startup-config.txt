@@ -1,0 +1,111 @@
+: Saved
+: Written by enable_15 at 00:00:00 UTC Mar 1 1993
+: Call-home enabled from prompt by enable_15 at 00:00:00 UTC Mar 1 1993
+: Written by enable_15 at 01:41:00 UTC Mar 1 1993
+: Call-home enabled from prompt by enable_15 at 01:41:00 UTC Mar 1 1993
+:
+ASA Version 8.4(2)
+!
+hostname ASA
+names
+!
+interface Ethernet0/0
+ switchport access vlan 2
+!
+interface Ethernet0/1
+ switchport access vlan 1
+!
+interface Ethernet0/2
+ switchport access vlan 3
+!
+interface Ethernet0/3
+ switchport access vlan 1
+!
+interface Ethernet0/4
+ switchport access vlan 1
+!
+interface Ethernet0/5
+ switchport access vlan 1
+!
+interface Ethernet0/6
+ switchport access vlan 1
+!
+interface Ethernet0/7
+ switchport access vlan 1
+!
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 192.168.1.1 255.255.255.0
+!
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address 209.165.200.226 255.255.255.248
+!
+interface Vlan3
+ no forward interface Vlan1
+ nameif dmz
+ security-level 50
+ ip address 192.168.2.1 255.255.255.0
+!
+object-group service DM_INLINE_SERVICE_1
+ service-object tcp destination eq 80
+ service-object tcp destination eq 23
+object network Webserver
+ host 192.168.2.100
+object network Webserver-Ext
+ host 209.165.200.230
+object network dmz-subnet
+ subnet 192.168.2.0 255.255.255.0
+object network inside-subnet
+ subnet 192.156.1.0 255.255.255.0
+!
+route outside 0.0.0.0 0.0.0.0 209.165.200.225 1
+!
+access-list Outside_access_in extended permit object-group DM_INLINE_SERVICE_1 any object Webserver
+!
+!
+access-group Outside_access_in in interface outside
+object network Webserver
+ nat (dmz,outside) static 209.165.200.230
+object network dmz-subnet
+ nat (dmz,outside) dynamic interface
+object network inside-subnet
+ nat (inside,outside) dynamic interface
+!
+!
+!
+!
+class-map global-class
+ match default-inspection-traffic
+!
+policy-map global-policy
+ class global-class
+  inspect dns 
+  inspect ftp 
+  inspect h323 
+  inspect http 
+  inspect icmp 
+  inspect tftp 
+!
+service-policy global-policy global
+!
+telnet timeout 5
+ssh timeout 5
+!
+dhcpd address 192.168.1.1-192.168.1.99 inside
+dhcpd dns 209.165.200.10 interface inside
+dhcpd enable inside
+!
+dhcpd auto_config outside
+!
+dhcpd address 192.168.2.10-192.168.2.100 dmz
+dhcpd dns 209.165.200.10 interface dmz
+dhcpd enable dmz
+!
+!
+!
+!
+!
+

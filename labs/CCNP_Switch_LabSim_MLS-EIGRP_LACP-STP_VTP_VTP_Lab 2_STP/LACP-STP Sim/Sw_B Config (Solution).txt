@@ -1,0 +1,133 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Sw_B
+!
+enable password Cisco
+!
+ip name-server 0.0.0.0
+!
+vtp mode transparent
+!
+spanning-tree mode rapid-pvst
+!
+vlan 11
+!
+vlan 12
+!
+vlan 13
+!
+vlan 21
+ name Marketing
+!
+vlan 22
+ name Sales
+!
+vlan 23
+ name Engineering
+!
+vlan 99
+ name TrunkNative
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 1,21-23
+ channel-protocol lacp
+ channel-group 1 mode passive
+ switchport mode trunk
+!
+interface FastEthernet0/4
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 1,21-23
+ channel-protocol lacp
+ channel-group 1 mode passive
+ switchport mode trunk
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+ switchport access vlan 21
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/10
+ switchport access vlan 21
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+ switchport access vlan 22
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/14
+ switchport access vlan 22
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/15
+ switchport access vlan 23
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/16
+ switchport access vlan 23
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet1/1
+!
+interface GigabitEthernet1/2
+!
+interface Port-channel 1
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 1,21-23
+ switchport mode trunk
+!
+interface Vlan1
+ ip address 192.168.1.11 255.255.255.0
+ shutdown
+!
+!
+line con 0
+!
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+end

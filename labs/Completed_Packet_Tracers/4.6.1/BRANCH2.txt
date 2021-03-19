@@ -1,0 +1,26 @@
+hostname Branch2
+int Loopback0
+ip address 192.168.7.1 255.255.255.0
+int Loopback1
+ip address 192.168.8.1 255.255.255.0
+int Loopback2
+ip address 192.168.9.1 255.255.255.0
+int FastEthernet0/0
+no ip address
+shutdown
+int fa0/1
+no ip address
+shutdown
+int s0/0/0
+no ip address
+shutdown
+int s0/0/1
+ip address 172.16.100.2 255.255.255.252
+no shutdown
+router rip
+ network 172.16.0.0
+ network 192.168.7.0
+ network 192.168.8.0
+ network 192.168.9.0
+end
+copy run start

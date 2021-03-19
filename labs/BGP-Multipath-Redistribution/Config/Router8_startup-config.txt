@@ -1,0 +1,68 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R8
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 192.168.8.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0
+ no ip address
+ shutdown
+!
+interface Serial0/1
+ no ip address
+ shutdown
+!
+interface Serial0/2
+ no ip address
+ shutdown
+!
+interface Serial0/3
+ ip address 10.2.8.8 255.255.255.0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.2.8.2 
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+

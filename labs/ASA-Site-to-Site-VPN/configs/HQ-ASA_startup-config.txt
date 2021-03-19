@@ -1,0 +1,108 @@
+: Saved
+: Written by enable_15 at 00:30:12 UTC Mar 1 1993
+: Call-home enabled from prompt by enable_15 at 00:30:12 UTC Mar 1 1993
+:
+ASA Version 8.4(2)
+!
+hostname HQ-ASA
+names
+!
+interface Ethernet0/0
+ switchport access vlan 2
+!
+interface Ethernet0/1
+ switchport access vlan 1
+!
+interface Ethernet0/2
+ switchport access vlan 1
+!
+interface Ethernet0/3
+ switchport access vlan 1
+!
+interface Ethernet0/4
+ switchport access vlan 1
+!
+interface Ethernet0/5
+ switchport access vlan 1
+!
+interface Ethernet0/6
+ switchport access vlan 1
+!
+interface Ethernet0/7
+ switchport access vlan 1
+!
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 192.168.1.1 255.255.255.0
+!
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address 209.165.200.226 255.255.255.248
+!
+object network Remote-subnet
+ subnet 192.168.2.0 255.255.255.0
+object network inside-subnet
+ subnet 192.168.1.0 255.255.255.0
+!
+route outside 0.0.0.0 0.0.0.0 209.165.200.225 1
+route outside 192.168.2.0 255.255.255.0 209.165.200.234 1
+!
+access-list VPN-INTERESTING-TRAFFIC extended permit icmp object inside-subnet object Remote-subnet
+access-list VPN-INTERESTING-TRAFFIC extended permit tcp object inside-subnet object Remote-subnet
+!
+access-list VPN-PRIVATE-TRAFFIC extended permit tcp object Remote-subnet object inside-subnet
+access-list VPN-PRIVATE-TRAFFIC extended permit icmp object Remote-subnet object inside-subnet
+!
+!
+access-group VPN-PRIVATE-TRAFFIC out interface inside
+!
+!
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp 
+  inspect h323 
+  inspect http 
+  inspect icmp 
+  inspect tftp 
+!
+service-policy global_policy global
+!
+telnet timeout 5
+ssh timeout 5
+!
+dhcpd address 192.168.1.10-192.168.1.99 inside
+dhcpd dns 209.165.200.10 interface inside
+dhcpd enable inside
+!
+dhcpd auto_config outside
+!
+!
+!
+crypto ipsec ikev1 transform-set VPN-TRANSFORM esp-3des esp-md5-hmac
+!
+crypto map CRYPTO-MAP 1 match address VPN-INTERESTING-TRAFFIC
+crypto map CRYPTO-MAP 1 set peer 209.165.200.234 
+crypto map CRYPTO-MAP 1 set security-association lifetime seconds 86400
+crypto map CRYPTO-MAP 1 set ikev1 transform-set VPN-TRANSFORM 
+crypto map CRYPTO-MAP interface outside
+crypto ikev1 enable outside
+crypto ikev1 policy 1
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+!
+tunnel-group 209.165.200.234 type ipsec-l2l
+tunnel-group 209.165.200.234 ipsec-attributes
+ ikev1 pre-shared-key cisco
+!

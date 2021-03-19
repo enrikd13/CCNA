@@ -1,0 +1,44 @@
+
+Cisco 642-832 TSHOOT Topology & Tickets for Cisco Packet Tracer rel. 6.1 STUDENT - User Guide and Release Notes:
+
+1)
+The included Full Working TSHOOT Topology and additional 15 TSHOOT Ticket Topologies are developed for the final Cisco Packet Tracer release 6.1 "STUDENT" and later.
+
+2)
+All (.PKT) Ticket files should be saved within a subfolder under the Packet Tracer ...\SAVES folder on the user PC.
+
+3)
+IMPORTANT: To make each Ticket run more smooth and fast + also avoiding the possibilty of cheating (by looking at PT Links Up/Down) - Packet Tracer LINK LIGHTS should be TURNED OFF, while troubleshooting each Ticket!!!
+
+Therefore, pls. enter Packet Tracer Menu: "Options / Preferences / Interface" to DISABLE Packet Tracer Link Lights!
+
+4)
+Ticket Answers + Tech notes and Tips & Tricks etc. are supplied within the available PULL DOWN MENU, located at the MIDDLE/BOTTOM of each Packet Tracer Main Screen - Pls. click at the small "v"-sign there, to select a Ticket Answer etc. from the Menu.
+
+5)
+All supplied TSHOOT Tickets are fully supported within the final Packet Tracer 6.1 STUDENT Simulator, except from the following 3 Tickets:
+
+Ticket#2 (HSRP Route Metric Object Tracking)
+Ticket#6 (VACL filter)
+Ticket#11 (Route-map based OSPF->EIGRP Redistribution)
+
+because theese technologies are just partially supported within the current final Packet Tracer 6.1 STUDENT release.
+
+The mentioned 3 Tickets are therefore "faked" (as close as possible), and furthermore fully described (within available Pull Down Menues) in each Ticket.
+
+6)
+To improve TSHOOT training and learning, each Ticket should be started "anonymously" by double clicking a random TSHOOT Ticket (.pkt) file!
+
+This can e.g. be done from within a file-manager app, where the actual Ticket filename has been hidden, due to a "shrinked" file-list panel.
+
+In addition, the current TSHOOT .pkt files - alternately - should be sorted by: "date", "size" and "filename" - repeatedly in both ascending and descending order within the filemanager.
+
+In this way, the Troubleshooter will NEVER know what Ticket, he is going to solve, which is an important goal!
+
+7)
+Tickets with INITIAL Client IP addresses of 10.2.1.x /24 are basicly configured as "fixed" Client IP addresses - Remaining (169.x.x.x based) Tickets uses DHCP for supplying Client IP addresses - This is due to speed up the troubleshooting process within each Ticket.
+
+8)
+However, pls. allow about a minute to get each Ticket FULLY converged - (in terms of Routing Protocol Convergence etc.).
+
+ 

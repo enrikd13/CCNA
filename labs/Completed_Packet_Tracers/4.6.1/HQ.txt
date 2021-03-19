@@ -1,0 +1,31 @@
+hostname HQ
+int Loopback0
+ip address 192.168.4.1 255.255.255.0
+int Loopback1
+ip address 192.168.5.1 255.255.255.0
+int Loopback2
+ip address 192.168.6.1 255.255.255.0
+int fa0/0
+no ip address
+shutdown
+int fa0/1
+no ip address
+shutdown
+int s0/0/0
+ip address 10.10.10.253 255.255.255.252
+clock rate 64000
+no shutdown
+int s0/0/1
+ip address 172.16.100.1 255.255.255.252
+clock rate 64000
+no shutdown
+router rip
+ network 10.0.0.0
+ network 172.16.0.0
+ network 192.168.4.0
+ network 192.168.5.0
+ network 192.168.6.0
+end
+copy run start
+y
+

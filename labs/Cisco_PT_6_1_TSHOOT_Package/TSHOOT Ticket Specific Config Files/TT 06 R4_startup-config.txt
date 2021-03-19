@@ -1,0 +1,156 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R4
+!
+!
+!
+!
+ip dhcp excluded-address 10.2.1.1 10.2.1.4
+ip dhcp excluded-address 10.2.1.254
+!
+ip dhcp pool VLAN_10_CLIENTS
+ network 10.2.1.0 255.255.255.0
+ default-router 10.2.1.254
+clock timezone UTC 0 0
+!
+!
+ip cef
+ipv6 unicast-routing
+!
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback4
+ description Test I/F for OSPFv2 & OSPFv3 Routing
+ ip address 4.4.4.4 255.255.255.255
+ ipv6 address FEC0::4:4/122
+ ipv6 ospf 6 area 34
+!
+interface Loopback14
+ description Test I/F for RIPng Routing
+ no ip address
+ ipv6 address FEC0::14:4/122
+ ipv6 rip RIP_ZONE enable 
+!
+interface Loopback21
+ description Test I/F for EIGRPv4 Routing & IP(v4) Helper Loopback I/F
+ ip address 10.1.21.129 255.255.255.224
+!
+interface Tunnel34
+ no ip address
+ mtu 1476
+ ipv6 address 2026::34:2/122
+ ipv6 ospf 6 area 34
+ tunnel source Loopback4
+ tunnel destination 3.3.3.3
+ tunnel mode ipv6ip
+!
+!
+interface FastEthernet0/0
+ description L3 Link to DSW1 fa0/1
+ ip address 10.1.4.5 255.255.255.252
+ duplex full
+ speed 100
+ ipv6 address 2026::2:1/122
+ ipv6 rip RIP_ZONE enable 
+!
+interface FastEthernet0/1
+ description L3 Link to DSW2 fa0/14
+ ip address 10.1.4.9 255.255.255.252
+ duplex full
+ speed 100
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+!
+interface Serial0/0/0.34 point-to-point
+ description Link to R3 s0/0/0.34
+ ip address 10.1.1.10 255.255.255.252
+ frame-relay interface-dlci 434
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 10
+ redistribute ospf 1 metric 100000 10 255 1 1500 
+ network 10.1.4.4 0.0.0.3
+ network 10.1.4.8 0.0.0.3
+ network 10.1.21.128 0.0.0.31
+ no auto-summary
+!
+router ospf 1
+ router-id 4.4.4.4
+ log-adjacency-changes
+ area 34 nssa
+ redistribute eigrp 10 metric-type 1 subnets 
+ network 10.1.1.8 0.0.0.3 area 34
+ network 4.4.4.4 0.0.0.0 area 34
+!
+ipv6 router ospf 6
+ router-id 4.4.4.4
+ log-adjacency-changes
+ redistribute rip RIP_ZONE 
+ redistribute connected 
+!
+ipv6 router rip RIP_ZONE
+ redistribute ospf 6 metric 4 
+ redistribute connected metric 3 
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp authentication-key 1 md5 TSHOOT
+ntp authenticate
+ntp trusted-key 1
+ntp server 209.65.200.241 key 1
+ntp update-calendar
+!
+end
+

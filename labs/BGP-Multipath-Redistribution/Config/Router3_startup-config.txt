@@ -1,0 +1,81 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R3
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0
+ ip address 10.3.4.3 255.255.255.0
+ clock rate 125000
+!
+interface Serial0/1
+ ip address 10.2.3.3 255.255.255.0
+!
+interface Serial0/2
+ ip address 10.1.3.3 255.255.255.0
+!
+interface Serial0/3
+ ip address 10.3.7.3 255.255.255.0
+ clock rate 125000
+!
+router eigrp 100
+ redistribute bgp 65303 metric 1500 2000 255 1 1500 
+ network 10.3.7.0 0.0.0.255
+ auto-summary
+!
+router bgp 65303
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ no synchronization
+ neighbor 10.1.3.1 remote-as 65101
+ neighbor 10.2.3.2 remote-as 65202
+ neighbor 10.3.4.4 remote-as 65404
+ redistribute eigrp 100 
+!
+ip classless
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+

@@ -1,0 +1,143 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Seattle-1
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+no ip domain-lookup
+!
+!
+interface FastEthernet0/1
+ switchport trunk native vlan 30
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/3
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/4
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/5
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/6
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/7
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/8
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/9
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/10
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/11
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/12
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/13
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/14
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/15
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/16
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/17
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/18
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/19
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/20
+ switchport access vlan 60
+ switchport mode access
+!
+interface FastEthernet0/21
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/22
+ switchport access vlan 30
+ switchport mode access
+!
+interface FastEthernet0/23
+ switchport mode trunk
+!
+interface FastEthernet0/24
+ switchport access vlan 10
+ switchport mode access
+!
+interface GigabitEthernet1/1
+ switchport trunk native vlan 30
+ switchport mode trunk
+!
+interface GigabitEthernet1/2
+ switchport access vlan 30
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan30
+ ip address 192.168.30.1 255.255.255.224
+!
+ip default-gateway 192.168.30.30
+!
+!
+line con 0
+ password sanfran
+ login
+ exec-timeout 0 0
+!
+line vty 0 4
+ exec-timeout 0 0
+ password sanfran
+ login
+line vty 5 15
+ password cisco
+ login
+!
+!
+end
+

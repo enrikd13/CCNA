@@ -1,0 +1,211 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname DSW1
+!
+!
+!
+!
+!
+clock timezone UTC 0 0
+!
+ip routing
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree vlan 1,10,200 priority 16384
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ description IPv4, IPv6 & RIPng Test I/F
+ ip address 11.11.11.11 255.255.255.255
+ ipv6 address FEC0::11:1/122
+ ipv6 rip RIP_ZONE enable 
+!
+interface Port-channel 12
+ description IPv4 (L3) Port-channel to DSW2
+ no switchport
+ ip address 10.2.4.13 255.255.255.252
+!
+interface Port-channel 13
+ description L2 dot1Q Trunk to ASW1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel 14
+ description L2 dot1Q Trunk to ASW2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ description L3 UpLink to R4 Fa0/0
+ no switchport
+ ip address 10.1.4.6 255.255.255.252
+ duplex full
+ speed 100
+ ipv6 address 2026::2:2/122
+ ipv6 rip RIP_ZONE enable 
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+ channel-group 13 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/20
+ channel-group 13 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/21
+ channel-group 14 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/22
+ channel-group 14 mode on
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ duplex full
+ speed 100
+!
+interface FastEthernet0/23
+ description IPv4 (L3) Po12 Channel to DSW2 Fa0/23
+ no switchport
+ channel-group 12 mode on
+ no ip address
+ duplex full
+ speed 100
+!
+interface FastEthernet0/24
+ description IPv6 Link to DSW2 Fa0/24
+ no switchport
+ no ip address
+ duplex full
+ speed 100
+ ipv6 address 2026::3:1/122
+ ipv6 rip RIP_ZONE enable 
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan10
+ description Client VLAN from ASW1
+ ip address 10.2.1.1 255.255.255.0
+ ip helper-address 10.2.21.129
+ standby version 2
+ standby 10 ip 10.2.1.254
+ standby 10 priority 150
+ standby 10 preempt
+ standby 10 track FastEthernet0/1
+!
+interface Vlan20
+ description Client VLAN from ASW2
+ ip address 10.2.2.1 255.255.255.0
+!
+interface Vlan200
+ description Netw- Management VLAN
+ ip address 192.168.1.129 255.255.255.224
+!
+router eigrp 10
+ network 10.1.4.4 0.0.0.3
+ network 10.2.0.0 0.0.255.255
+ network 192.168.1.128 0.0.0.31
+ network 11.11.11.11 0.0.0.0
+ no auto-summary
+!
+ipv6 router rip RIP_ZONE
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp authentication-key 1 md5 TSHOOT
+ntp authenticate
+ntp trusted-key 1
+ntp server 209.65.200.241 key 1
+ntp update-calendar
+!
+end
+

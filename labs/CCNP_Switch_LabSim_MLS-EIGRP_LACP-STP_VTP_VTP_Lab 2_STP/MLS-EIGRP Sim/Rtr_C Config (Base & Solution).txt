@@ -1,0 +1,143 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Rtr_C
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+interface Loopback0
+ no ip address
+!
+interface FastEthernet0/0
+ ip address 10.10.10.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 208.77.188.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Serial0/1/0
+ no ip address
+ shutdown
+!
+interface Serial0/1/1
+ no ip address
+ shutdown
+!
+interface FastEthernet1/0
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/1
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/2
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/3
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/4
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/5
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/6
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/7
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/8
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/9
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/10
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/11
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/12
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/13
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/14
+ switchport mode access
+ shutdown
+!
+interface FastEthernet1/15
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 650
+ network 10.0.0.0
+ network 208.77.188.0
+ no auto-summary
+!
+ip classless
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end

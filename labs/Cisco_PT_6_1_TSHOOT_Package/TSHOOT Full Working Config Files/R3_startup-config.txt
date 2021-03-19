@@ -1,0 +1,135 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R3
+!
+!
+!
+!
+!
+clock timezone UTC 0 0
+!
+!
+ip cef
+ipv6 unicast-routing
+!
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback3
+ description Test I/F for OSPFv2 & OSPFv3 Routing
+ ip address 3.3.3.3 255.255.255.255
+ ipv6 address FEC0::3:3/122
+ ipv6 ospf 6 area 0
+!
+interface Tunnel34
+ no ip address
+ mtu 1476
+ ipv6 address 2026::34:1/122
+ ipv6 ospf 6 area 34
+ tunnel source Loopback3
+ tunnel destination 4.4.4.4
+ tunnel mode ipv6ip
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+ clock rate 2000000
+!
+interface Serial0/0/0.23 point-to-point
+ description Link to R2 s0/0/0.23
+ ip address 10.1.1.6 255.255.255.252
+ frame-relay interface-dlci 323
+ ipv6 address 2026::1:2/122
+ ipv6 ospf 6 area 0
+ clock rate 2000000
+!
+interface Serial0/0/0.34 point-to-point
+ description Link to R4 s0/0/0.34
+ ip address 10.1.1.9 255.255.255.252
+ frame-relay interface-dlci 343
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ area 34 nssa no-summary
+ network 10.1.1.8 0.0.0.3 area 34
+ network 10.1.1.4 0.0.0.3 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+!
+ipv6 router ospf 6
+ router-id 3.3.3.3
+ log-adjacency-changes
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp authentication-key 1 md5 TSHOOT
+ntp authenticate
+ntp trusted-key 1
+ntp server 209.65.200.241 key 1
+ntp update-calendar
+!
+end
+

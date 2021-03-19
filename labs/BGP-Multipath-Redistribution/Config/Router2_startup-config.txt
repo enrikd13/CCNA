@@ -1,0 +1,78 @@
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R2
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0
+ ip address 10.1.2.2 255.255.255.0
+!
+interface Serial0/1
+ ip address 10.2.3.2 255.255.255.0
+ clock rate 125000
+!
+interface Serial0/2
+ ip address 10.2.4.2 255.255.255.0
+ clock rate 125000
+!
+interface Serial0/3
+ ip address 10.2.8.2 255.255.255.0
+ clock rate 125000
+!
+router bgp 65202
+ bgp router-id 2.2.2.2
+ bgp log-neighbor-changes
+ no synchronization
+ neighbor 10.1.2.1 remote-as 65101
+ neighbor 10.2.3.3 remote-as 65303
+ neighbor 10.2.4.4 remote-as 65404
+ redistribute static 
+!
+ip classless
+ip route 192.168.8.0 255.255.255.0 10.2.8.8 
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+

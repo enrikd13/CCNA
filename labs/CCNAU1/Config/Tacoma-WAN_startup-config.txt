@@ -1,0 +1,149 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Tacoma-WAN
+!
+!
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+ip dhcp excluded-address 172.16.10.1 172.16.10.9
+ip dhcp excluded-address 172.16.20.1 172.16.20.9
+ip dhcp excluded-address 172.16.50.1 172.16.50.9
+ip dhcp excluded-address 10.1.1.1 10.1.1.9
+!
+ip dhcp pool sales
+ network 172.16.10.0 255.255.255.0
+ default-router 172.16.10.1
+ dns-server 10.10.10.254
+ip dhcp pool engineering
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.1
+ dns-server 10.10.10.254
+ip dhcp pool wireless
+ network 172.16.50.0 255.255.255.0
+ default-router 172.16.50.1
+ dns-server 10.10.10.254
+ip dhcp pool DMZ
+ network 10.1.1.0 255.255.255.0
+ default-router 10.1.1.1
+ dns-server 10.10.10.254
+!
+!
+aaa new-model
+!
+aaa authentication login default group tacacs+ none 
+aaa authentication login telnet_lines group tacacs+ 
+!
+!
+clock timezone ca -8
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 1
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 10.1.1.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 172.16.10.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 172.16.20.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.40
+ encapsulation dot1Q 40
+ ip address 172.16.40.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 172.16.50.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+!
+interface Serial0/0/0.3 point-to-point
+ ip address 192.168.2.129 255.255.255.192
+ frame-relay interface-dlci 301
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ ip access-group 10 out
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 15
+ network 172.16.0.0
+ network 192.168.2.0
+ network 10.0.0.0
+ no auto-summary
+!
+ip classless
+!
+!
+ip access-list extended BLK-DMZ
+ deny ip 172.16.10.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 172.16.20.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 172.16.40.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 172.16.50.0 0.0.0.255 10.1.1.0 0.0.0.255
+ permit ip any any
+!
+!
+!
+tacacs-server host 192.168.40.200 key ciscosecret
+!
+!
+!
+no cdp run
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+
+line vty 0 4
+ exec-timeout 0 0
+ login
+ login authentication telnet_lines
+!
+!
+ntp server 10.10.10.254 key 0
+!
+end
+

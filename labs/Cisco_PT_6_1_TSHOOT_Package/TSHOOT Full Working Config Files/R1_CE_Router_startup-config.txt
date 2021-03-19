@@ -1,0 +1,142 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+!
+!
+!
+!
+clock timezone UTC 0 0
+!
+!
+ip cef
+ipv6 unicast-routing
+!
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ description Test I/F for BGP, OSPFv2 & OSPFv3 Routing
+ ip address 1.1.1.1 255.255.255.255
+ ipv6 address FEC0::1:1/122
+ ipv6 ospf 6 area 12
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+!
+interface Serial0/0/0.12 point-to-point
+ description Link to R2 s0/0/0.12
+ ip address 10.1.1.1 255.255.255.252
+ frame-relay interface-dlci 121
+ ip ospf message-digest-key 1 md5 TSHOOT
+ ip nat inside
+ ipv6 address 2026::12:1/122
+ ipv6 ospf 6 area 12
+ clock rate 2000000
+!
+interface Serial0/0/1
+ description Link to ISP Router s0/0/0
+ ip address 209.65.200.225 255.255.255.252
+ encapsulation frame-relay
+ frame-relay interface-dlci 151
+ ip access-group 30 in
+ ip nat outside
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ area 12 authentication message-digest
+ network 10.1.1.0 0.0.0.3 area 12
+ network 1.1.1.1 0.0.0.0 area 12
+ default-information originate
+!
+router bgp 65001
+ bgp log-neighbor-changes
+ no synchronization
+ neighbor 209.65.200.226 remote-as 65002
+ network 1.1.1.1 mask 255.255.255.255
+ network 209.65.200.224 mask 255.255.255.240
+!
+ipv6 router ospf 6
+ router-id 1.1.1.1
+ log-adjacency-changes
+!
+ip nat inside source list Nat_Traffic interface Serial0/0/1 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 Null0 25
+ip route 209.65.200.224 255.255.255.240 Null0 
+!
+ip flow-export version 9
+!
+!
+ip access-list standard Nat_Traffic
+ permit 10.1.0.0 0.0.255.255
+ permit 10.2.0.0 0.0.255.255
+ permit 192.168.1.128 0.0.0.31
+access-list 30 permit 209.65.200.224 0.0.0.3
+access-list 30 permit host 209.65.200.241
+access-list 30 permit host 15.15.15.15
+access-list 30 deny 10.1.0.0 0.0.255.255
+access-list 30 deny 10.2.0.0 0.0.255.255
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+ntp authentication-key 1 md5 08157F66263631 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 209.65.200.241 key 1
+ntp update-calendar
+!
+end
+

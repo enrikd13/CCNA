@@ -1,0 +1,61 @@
+!
+version 12.3
+no service password-encryption
+!
+hostname B2
+!
+!
+username HQ password 0 cisco123
+!
+!
+!
+interface FastEthernet0/0
+ description B2 LAN 1
+ ip address 10.1.80.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ description B2 LAN 2
+ ip address 10.1.70.1 255.255.255.0
+ ip access-group NO_FTP in
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ description Link to HQ
+ ip address 10.1.1.6 255.255.255.252
+ encapsulation ppp
+ ppp authentication chap
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface FastEthernet0/0
+ passive-interface FastEthernet0/1
+ network 10.1.1.4 0.0.0.3 area 0
+ network 10.1.70.0 0.0.0.255 area 0
+ network 10.1.80.0 0.0.0.255 area 0
+!
+ip classless
+!
+ip access-list extended NO_FTP
+ deny tcp 10.1.70.0 0.0.0.255 host 10.1.10.2 eq ftp
+ permit ip any any
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+end
+

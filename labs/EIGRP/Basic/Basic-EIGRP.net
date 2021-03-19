@@ -1,0 +1,122 @@
+autostart = False
+[localhost:7202]
+    workingdir = C:\Users\BARRYB~1\AppData\Local\Temp
+    udp = 10200
+    [[7200]]
+        image = C:\Users\Barry Burdette\Documents\GNS3\Image\c7200-jk9o3s-mz.122-16.bin
+        sparsemem = True
+        ghostios = True
+    [[ROUTER BB2]]
+        console = 2006
+        slot1 = PA-2FE-TX
+        f1/0 = SW6 1
+        f1/1 = SW7 1
+        slot2 = PA-8T
+        s2/0 = R3 s2/1
+        x = 255.0
+        y = 114.0
+        hx = 17.5
+        hy = 19.0
+    [[ETHSW SW7]]
+        1 = access 1 BB2 f1/1
+        x = 250.5
+        y = -22.0
+        hx = 13.0
+        hy = 10.0
+    [[ETHSW SW6]]
+        1 = access 1 BB2 f1/0
+        x = 255.5
+        y = 264.0
+        hx = 10.0
+        hy = 11.0
+[localhost:7200]
+    workingdir = C:\Users\BARRYB~1\AppData\Local\Temp
+    udp = 10000
+    [[7200]]
+        image = C:\Users\Barry Burdette\Documents\GNS3\Image\c7200-jk9o3s-mz.122-16.bin
+        sparsemem = True
+        ghostios = True
+    [[ROUTER R1]]
+        console = 2000
+        slot1 = PA-8T
+        s1/0 = BB1 s2/0
+        s1/1 = R2 s2/0
+        s1/2 = R2 s2/1
+        s1/3 = R3 s2/0
+        x = -82.0
+        y = -91.0
+        hx = 24.5
+        hy = 18.0
+    [[ROUTER R2]]
+        console = 2001
+        slot1 = PA-2FE-TX
+        f1/0 = SW3 1
+        f1/1 = SW4 1
+        slot2 = PA-8T
+        s2/0 = R1 s1/1
+        s2/1 = R1 s1/2
+        x = -215.0
+        y = 111.0
+        hx = 19.5
+        hy = 18.0
+    [[ETHSW SW3]]
+        1 = access 1 R2 f1/0
+        2 = access 1 R3 f1/0
+        x = -84.5
+        y = 117.0
+        hx = 12.0
+        hy = 10.0
+    [[ETHSW SW4]]
+        1 = access 1 R2 f1/1
+        x = -217.5
+        y = 264.0
+        hx = 11.0
+        hy = 11.0
+[localhost:7201]
+    workingdir = C:\Users\BARRYB~1\AppData\Local\Temp
+    udp = 10100
+    [[7200]]
+        image = C:\Users\Barry Burdette\Documents\GNS3\Image\c7200-jk9o3s-mz.122-16.bin
+        sparsemem = True
+        ghostios = True
+    [[ROUTER R3]]
+        console = 2002
+        slot1 = PA-2FE-TX
+        f1/0 = SW3 2
+        f1/1 = SW5 1
+        slot2 = PA-8T
+        s2/0 = R1 s1/3
+        s2/1 = BB2 s2/0
+        x = 48.0
+        y = 109.0
+        hx = 18.5
+        hy = 19.0
+    [[ROUTER BB1]]
+        console = 2005
+        slot1 = PA-2FE-TX
+        f1/0 = SW1 1
+        f1/1 = SW2 1
+        slot2 = PA-8T
+        s2/0 = R1 s1/0
+        x = -209.0
+        y = -260.0
+        hx = 17.5
+        hy = 18.0
+    [[ETHSW SW1]]
+        1 = access 1 BB1 f1/0
+        x = -372.5
+        y = -254.0
+        hx = 14.0
+        hy = 12.0
+    [[ETHSW SW2]]
+        1 = access 1 BB1 f1/1
+        x = -46.5
+        y = -254.0
+        hx = 12.0
+        hy = 10.0
+    [[ETHSW SW5]]
+        1 = access 1 R3 f1/1
+        x = 46.5
+        y = 265.0
+        hx = 8.0
+        hy = 12.0

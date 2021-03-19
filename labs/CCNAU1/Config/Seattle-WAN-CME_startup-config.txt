@@ -1,0 +1,204 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Seattle-WAN/CME
+!
+!
+!
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+!
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.9
+ip dhcp excluded-address 192.168.20.1 192.168.20.9
+ip dhcp excluded-address 192.168.50.1 192.168.50.9
+ip dhcp excluded-address 192.168.60.1 192.168.60.9
+!
+ip dhcp pool admin
+ network 192.168.8.0 255.255.252.0
+ default-router 192.168.10.0
+ dns-server 10.10.10.254
+ip dhcp pool accounting
+ network 192.168.16.0 255.255.248.0
+ default-router 192.168.20.0
+ dns-server 10.10.10.254
+ip dhcp pool wireless
+ network 192.168.50.0 255.255.255.0
+ default-router 192.168.50.1
+ dns-server 10.10.10.254
+ip dhcp pool voice
+ network 192.168.60.0 255.255.255.0
+ default-router 192.168.60.1
+ option 150 ip 192.168.60.1
+ dns-server 10.10.10.254
+!
+!
+aaa new-model
+!
+aaa authentication login console group tacacs+ 
+aaa authentication login default group tacacs+ none 
+aaa authentication login telnet_lines group tacacs+ 
+!
+!
+!
+!
+clock timezone ca -8
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 1
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+interface Loopback0
+ ip address 192.168.254.254 255.255.255.255
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.0 255.255.252.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.0 255.255.248.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.30
+ encapsulation dot1Q 30
+ ip address 192.168.30.30 255.255.255.224
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.40
+ encapsulation dot1Q 40
+ ip address 192.168.40.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 192.168.50.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface FastEthernet0/1.60
+ encapsulation dot1Q 60
+ ip address 192.168.60.1 255.255.255.0
+ ip access-group BLK-DMZ in
+!
+interface Serial0/0/0
+ no ip address
+ encapsulation frame-relay
+ ipv6 ospf cost 781
+!
+interface Serial0/0/0.3 point-to-point
+ ip address 192.168.1.1 255.255.255.0
+ frame-relay interface-dlci 201
+ clock rate 2000000
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 15
+ network 192.168.0.0 0.0.255.255
+ no auto-summary
+!
+ip classless
+!
+!
+ip access-list extended BLK-DMZ
+ deny ip 192.168.10.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 192.168.20.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 192.168.40.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 192.168.50.0 0.0.0.255 10.1.1.0 0.0.0.255
+ deny ip 192.168.60.0 0.0.0.255 10.1.1.0 0.0.0.255
+ permit ip any any
+!
+!
+tacacs-server host 192.168.40.200 key ciscosecret
+!
+!
+!
+telephony-service
+ max-ephones 5
+ max-dn 5
+ ip source-address 192.168.254.254 port 2000
+ auto assign 1 to 5
+ auto assign 4 to 6
+!
+ephone-dn 1
+ number 1101
+!
+ephone-dn 2
+ number 1102
+!
+ephone-dn 3
+ number 1103
+!
+ephone-dn 4
+ number 1104
+!
+ephone-dn 5
+ number 1105
+!
+ephone 1
+ device-security-mode none
+ mac-address 0090.216B.EDA1
+ type 7960
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 0002.1635.91D1
+ type 7960
+ button 1:2
+!
+ephone 3
+ device-security-mode none
+ mac-address 0001.6324.DBBE
+ type 7960
+ button 1:3
+!
+ephone 4
+ device-security-mode none
+ mac-address 000C.CF44.4419
+ type 7960
+ button 1:4
+!
+ephone 5
+ device-security-mode none
+!
+line con 0
+ exec-timeout 0 0
+ login authentication console
+line vty 0 4
+ exec-timeout 0 0
+ login authentication telnet_lines
+!
+!
+ntp server 10.10.10.254 key 0
+!
+end
+

@@ -1,0 +1,85 @@
+!
+version 12.3
+no service password-encryption
+!
+hostname HQ
+!
+!
+username B1 password 0 cisco123
+username B2 password 0 cisco123
+!
+!
+!
+interface FastEthernet0/0
+ description HQ LAN 1
+ ip address 10.1.50.1 255.255.255.0
+ ip access-group 101 in
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ description HQ LAN 2
+ ip address 10.1.40.1 255.255.255.0
+ ip access-group 10 out
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ description Link to B1
+ ip address 10.1.1.1 255.255.255.252
+ encapsulation ppp
+ ppp authentication chap
+ clock rate 64000
+!
+interface Serial0/0/1
+ description Link to B2
+ ip address 10.1.1.5 255.255.255.252
+ encapsulation ppp
+ ppp authentication chap
+ clock rate 64000
+!
+interface Serial0/1/0
+ description Link to ISP
+ ip address 209.165.201.2 255.255.255.252
+ ip access-group FIREWALL in
+!
+interface Serial0/1/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface FastEthernet0/0
+ passive-interface FastEthernet0/1
+ passive-interface Serial0/1/0
+ network 10.1.40.0 0.0.0.255 area 0
+ network 10.1.50.0 0.0.0.255 area 0
+ network 10.1.1.0 0.0.0.3 area 0
+ network 10.1.1.4 0.0.0.3 area 0
+ default-information originate
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 Serial0/1/0 
+!
+access-list 10 deny 10.1.10.0 0.0.0.255
+access-list 10 permit any
+access-list 101 deny tcp 10.1.50.0 0.0.0.63 host 10.1.80.16 eq www
+access-list 101 permit ip any any
+ip access-list extended FIREWALL
+ permit icmp any any echo-reply
+ permit tcp any any established
+ deny ip any any
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+end
+

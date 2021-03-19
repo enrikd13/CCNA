@@ -1,0 +1,95 @@
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname ISP
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ ip address 200.200.200.2 255.255.255.224
+ clock rate 64000
+!
+interface Serial0/1/0
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ redistribute static 
+ network 200.200.200.0 0.0.0.31 area 0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 Null0 
+ip route 1.0.0.0 255.0.0.0 Null0 
+ip route 2.0.0.0 255.0.0.0 Null0 
+ip route 3.0.0.0 255.0.0.0 Null0 
+ip route 4.0.0.0 255.0.0.0 Null0 
+ip route 5.0.0.0 255.0.0.0 Null0 
+ip route 6.0.0.0 255.0.0.0 Null0 
+ip route 7.0.0.0 255.0.0.0 Null0 
+ip route 8.0.0.0 255.0.0.0 Null0 
+ip route 10.0.0.0 255.0.0.0 Null0 
+ip route 11.0.0.0 255.0.0.0 Null0 
+ip route 100.0.0.0 255.0.0.0 Null0 
+ip route 101.0.0.0 255.0.0.0 Null0 
+ip route 102.0.0.0 255.0.0.0 Null0 
+ip route 141.100.0.0 255.255.0.0 Null0 
+ip route 141.108.0.0 255.255.0.0 Null0 
+ip route 142.100.0.0 255.255.0.0 Null0 
+ip route 143.100.0.0 255.255.0.0 Null0 
+ip route 144.100.0.0 255.255.0.0 Null0 
+ip route 145.100.0.0 255.255.0.0 Null0 
+ip route 146.100.0.0 255.255.0.0 Null0 
+ip route 147.100.0.0 255.255.0.0 Null0 
+ip route 148.100.0.0 255.255.0.0 Null0 
+ip route 149.100.0.0 255.255.0.0 Null0 
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login
+!
+!
+!
+end
+
